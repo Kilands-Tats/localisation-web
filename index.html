@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Localisation en Temps Réel</title>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                document.getElementById("output").innerHTML = "La géolocalisation n'est pas prise en charge par ce navigateur.";
+            }
+        }
+
+        function showPosition(position) {
+            let latitude = position.coords.latitude;
+            let longitude = position.coords.longitude;
+            let mapLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+            
+            document.getElementById("output").innerHTML = `
+                <p>Latitude: ${latitude}</p>
+                <p>Longitude: ${longitude}</p>
+                <p><a href="${mapLink}" target="_blank">Voir sur Google Maps</a></p>
+            `;
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    document.getElementById("output").innerHTML = "Vous avez refusé la demande de localisation.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    document.getElementById("output").innerHTML = "Informations de localisation indisponibles.";
+                    break;
+                case error.TIMEOUT:
+                    document.getElementById("output").innerHTML = "La demande de localisation a expiré.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    document.getElementById("output").innerHTML = "Une erreur inconnue est survenue.";
+                    break;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Obtenir votre localisation</h2>
+    <button onclick="getLocation()">Obtenir la position</button>
+    <div id="output"></div>
+</body>
+</html>
